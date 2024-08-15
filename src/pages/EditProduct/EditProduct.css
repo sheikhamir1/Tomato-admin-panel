@@ -1,0 +1,104 @@
+/* EditProduct.css */
+
+.editItems {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.editItems .form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.editItems .image-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.editItems .upload-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.editItems .image-upload-label {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.editItems .image-upload-label:hover .preview-image {
+  opacity: 0.8;
+}
+
+.editItems .preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.editItems .input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.editItems .input-label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+.editItems .input-field,
+.editItems .select-field {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.editItems .input-field:focus,
+.editItems .select-field:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.editItems .category-price-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.editItems .category-select,
+.editItems .price-input,
+.editItems .stock-input {
+  flex: 1;
+}
+
+.editItems .submit-btn {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.editItems .submit-btn:hover {
+  background-color: #0056b3;
+}
