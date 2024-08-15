@@ -1,0 +1,333 @@
+.tabs-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  flex-wrap: wrap; /* Ensure tabs wrap on smaller screens */
+  margin-bottom: 20px; /* Add some margin below the tabs */
+}
+
+.tab {
+  flex: 1; /* Allow tabs to grow and fill space equally */
+  max-width: 150px; /* Limit the max width of each tab */
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px; /* Rounded corners for a modern look */
+  font-weight: 500;
+}
+
+.tab:hover {
+  background-color: #ffe0dc; /* Light hover effect */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow on hover */
+}
+
+.tab.selected {
+  background-color: #ff6347 !important; /* Highlight selected tab */
+  color: white; /* Make text white when selected */
+  border-color: #ff6347 !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Add shadow for active tab */
+}
+
+.tab-content {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.ordersTab {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .tab {
+    flex: 1 1 45%; /* Make tabs take up more width on smaller screens */
+    margin-bottom: 10px; /* Add margin between rows on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .tab {
+    flex: 1 1 100%; /* Stack tabs vertically on very small screens */
+  }
+}
+
+/* new 2 */
+/* General Styles */
+.order-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.tabs-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  flex: 1;
+  text-align: center;
+}
+
+.tab.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.loading {
+  text-align: center;
+  color: #007bff;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+/* Order List Grid */
+.order-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.order-header h3 {
+  margin: 0;
+}
+
+.order-header p {
+  margin: 0;
+}
+
+.status-pending {
+  color: orange;
+}
+
+.status-accepted {
+  color: green;
+}
+
+.status-rejected {
+  color: red;
+}
+
+.status-delivered {
+  color: blue;
+}
+
+/* Order Items Table */
+.order-items {
+  margin-top: 15px;
+  overflow: auto;
+}
+
+.order-items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-items-table th,
+.order-items-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.order-items-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.order-items-table td {
+  background-color: #fafafa;
+}
+
+/* Media Queries for Small Screens */
+@media (max-width: 768px) {
+  .tabs-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab {
+    margin-bottom: 10px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .order-list {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+
+  .order-card {
+    padding: 15px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-header h3,
+  .order-header p {
+    margin-bottom: 8px;
+  }
+
+  .order-items-table th,
+  .order-items-table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .order-container {
+    padding: 10px;
+  }
+
+  .tabs-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tab {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .order-card {
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .order-header h3 {
+    font-size: 16px;
+  }
+
+  .order-header p {
+    font-size: 14px;
+  }
+
+  .order-items-table th,
+  .order-items-table td {
+    font-size: 11px;
+    padding: 5px;
+  }
+}
+.change-status {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.change-status label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+  color: #333;
+}
+
+.change-status select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.change-status select:focus {
+  border-color: #007bff;
+  background-color: #fff;
+  outline: none;
+}
+
+.change-status select option {
+  padding: 10px;
+  color: #333;
+}
+
+.change-status select:hover {
+  border-color: #0056b3;
+}
+
+.change-status select:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+/* nw 3 */
+/* OrderTab.css */
+.apply-discount {
+  margin-top: 20px;
+}
+
+.apply-discount label {
+  display: block;
+  margin: 5px 0;
+}
+
+.apply-discount select,
+.apply-discount input {
+  margin: 5px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.apply-discount button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.apply-discount button:hover {
+  background-color: #45a049;
+}
