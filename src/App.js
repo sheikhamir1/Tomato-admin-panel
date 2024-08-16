@@ -12,6 +12,7 @@ import AddNewProduct from "./pages/AddNewProductCategory/AddNewProductCategory";
 import EditProductCategory from "./pages/EditProductCategory/EditProductCategory";
 import EditProduct from "./pages/EditProduct/EditProduct";
 import Login from "./pages/Login/Login";
+import InvoicePage from "./pages/Invoice/Invoice";
 
 // _____  _  __
 // / ____|| |/ /
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/product/addProduct" element={<AddProducts />} />
           <Route path="/product/editProduct/:id" element={<EditProduct />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/invoice/:orderId" element={<InvoicePage />} />
           <Route path="/" element={<Login />} />
         </Routes>
       </div>

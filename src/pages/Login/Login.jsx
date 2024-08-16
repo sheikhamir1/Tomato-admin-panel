@@ -3,11 +3,11 @@ import "./Login.css";
 import { useForm } from "react-hook-form";
 
 function Login() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     // Log the user details for debugging
-    console.log("User data submitted:", data);
+    // console.log("User data submitted:", data);
 
     try {
       const response = await fetch(`http://localhost:8080/authenticate`, {
@@ -19,16 +19,61 @@ function Login() {
       });
 
       if (!response.ok) {
+        alert("Invalid credentials, please try again");
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log("Login result:", result);
+      // console.log("Login result:", result);
 
       // Store token and username in localStorage
-      localStorage.setItem("token", result.jwtToken);
-      //   localStorage.setItem("username", data.userName); // Storing username
-      window.location.replace("/product");
+      // localStorage.setItem("token", result.jwtToken);
+
+      if (result.user.role[0].roleName === "ADMIN") {
+        console.log("welcome admin");
+
+        const storeToken = () => {
+          // console.log("store token is working ");
+
+          const expirationTime = new Date().getTime() + 20 * 60 * 1000; // 20 minutes from now
+          localStorage.setItem("token", result.jwtToken);
+          localStorage.setItem("tokenExpiration", expirationTime);
+        };
+        storeToken();
+
+        const isTokenExpired = () => {
+          // console.log("is token expired is working ");
+
+          const tokenExpiration = localStorage.getItem("tokenExpiration");
+          if (!tokenExpiration) {
+            return true; // No expiration time set, consider token as expired
+          }
+          return new Date().getTime() > parseInt(tokenExpiration, 10);
+        };
+
+        const removeToken = () => {
+          // console.log("remove token is working ");
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiration");
+        };
+
+        const validateToken = () => {
+          // console.log("validate token is working ");
+          if (isTokenExpired()) {
+            removeToken();
+            // Optionally redirect to login page or handle the expiration
+            alert("Token has expired, please log in again.");
+            window.location.replace("/login");
+          }
+        };
+
+        // Call this function on app load or whenever you want to check the token
+        validateToken();
+
+        window.location.replace("/product");
+      }
+
+      // navigate("/product");
       window.scrollTo(0, 0);
 
       //   reset();

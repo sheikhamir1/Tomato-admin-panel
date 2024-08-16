@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Add this for navigation
 import "./OrderTab.css";
 
 const OrderTabs = () => {
@@ -8,6 +9,9 @@ const OrderTabs = () => {
   const [error, setError] = useState(null);
   const [discountType, setDiscountType] = useState({});
   const [discountAmount, setDiscountAmount] = useState({});
+  const [paymentMethod, setPaymentMethod] = useState({});
+  const [paymentAmount, setPaymentAmount] = useState({});
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -60,8 +64,6 @@ const OrderTabs = () => {
       }
 
       alert(`Order ${orderId} status updated to ${newStatus}`);
-
-      // Refetch orders after status update
       fetchOrdersByStatus(selectedTab);
     } catch (error) {
       console.error("Error updating order status", error);
@@ -86,11 +88,54 @@ const OrderTabs = () => {
         throw new Error("Failed to apply discount");
       }
 
-      // Refetch orders after applying discount
       fetchOrdersByStatus(selectedTab);
     } catch (error) {
       console.error("Error applying discount", error);
     }
+  };
+
+  // Update the payment method and amount for each order
+  const handlePaymentChange = (orderId, e) => {
+    const { name, value } = e.target;
+    if (name === "paymentMethod") {
+      setPaymentMethod((prev) => ({ ...prev, [orderId]: value }));
+    } else if (name === "paymentAmount") {
+      setPaymentAmount((prev) => ({ ...prev, [orderId]: value }));
+    }
+  };
+
+  // Make the payment request
+  const makePayment = async (orderId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/orders/${orderId}/payment`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: paymentAmount[orderId], // Fetch from state
+            paymentMethod: paymentMethod[orderId], // Fetch from state
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to make payment");
+      }
+
+      alert("Payment made successfully!");
+      fetchOrdersByStatus(selectedTab); // Refetch the orders after payment
+    } catch (error) {
+      console.error("Error making payment", error);
+    }
+  };
+
+  // Function to handle invoice generation
+  const generateInvoice = (orderId) => {
+    navigate(`/invoice/${orderId}`); // Navigate to the invoice page with the orderId
   };
 
   const handleDiscountChange = (orderId, e) => {
@@ -229,45 +274,91 @@ const OrderTabs = () => {
 
                 {/* Apply Discount Section (Visible only for Accepted orders) */}
                 {order.status === "Accepted" && (
-                  <div className="apply-discount">
-                    <label htmlFor={`discount-type-${order.orderId}`}>
-                      Discount Type:
-                    </label>
-                    <select
-                      id={`discount-type-${order.orderId}`}
-                      name="discountType"
-                      value={discountType[order.orderId] || "PERCENTAGE"}
-                      onChange={(e) => handleDiscountChange(order.orderId, e)}
-                    >
-                      <option value="PERCENTAGE">Percentage</option>
-                      <option value="FIXED">Fixed Amount</option>
-                    </select>
+                  <>
+                    <div className="apply-discount">
+                      <label htmlFor={`discount-type-${order.orderId}`}>
+                        Discount Type:
+                      </label>
+                      <select
+                        id={`discount-type-${order.orderId}`}
+                        name="discountType"
+                        value={discountType[order.orderId] || "PERCENTAGE"}
+                        onChange={(e) => handleDiscountChange(order.orderId, e)}
+                      >
+                        <option value="PERCENTAGE">Percentage</option>
+                        <option value="FIXED">Fixed Amount</option>
+                      </select>
 
-                    <label htmlFor={`discount-amount-${order.orderId}`}>
-                      Amount:
-                    </label>
-                    <input
-                      type="number"
-                      id={`discount-amount-${order.orderId}`}
-                      name="discountAmount"
-                      min="0"
-                      placeholder="Enter amount"
-                      value={discountAmount[order.orderId] || ""}
-                      onChange={(e) => handleDiscountChange(order.orderId, e)}
-                    />
+                      <label htmlFor={`discount-amount-${order.orderId}`}>
+                        Amount:
+                      </label>
+                      <input
+                        type="number"
+                        id={`discount-amount-${order.orderId}`}
+                        name="discountAmount"
+                        min="0"
+                        placeholder="Enter amount"
+                        value={discountAmount[order.orderId] || ""}
+                        onChange={(e) => handleDiscountChange(order.orderId, e)}
+                      />
 
+                      <button
+                        onClick={() =>
+                          applyDiscount(
+                            order.orderId,
+                            discountAmount[order.orderId],
+                            discountType[order.orderId]
+                          )
+                        }
+                      >
+                        Apply Discount
+                      </button>
+                    </div>
+
+                    {/* Payment Section */}
+                    <div className="payment-section">
+                      <h4>Make Payment</h4>
+                      <label htmlFor={`payment-method-${order.orderId}`}>
+                        Payment Method:
+                      </label>
+                      <select
+                        id={`payment-method-${order.orderId}`}
+                        name="paymentMethod"
+                        value={paymentMethod[order.orderId] || ""}
+                        onChange={(e) => handlePaymentChange(order.orderId, e)}
+                      >
+                        <option defaultValue={""}>Select</option>
+                        <option value="UPI">UPI</option>
+                        <option value="CASH">Cash</option>
+                        <option value="OTHER">Other</option>
+                      </select>
+
+                      <label htmlFor={`payment-amount-${order.orderId}`}>
+                        Amount:
+                      </label>
+                      <input
+                        type="number"
+                        id={`payment-amount-${order.orderId}`}
+                        name="paymentAmount"
+                        min="0"
+                        placeholder="Enter amount"
+                        value={paymentAmount[order.orderId] || ""}
+                        onChange={(e) => handlePaymentChange(order.orderId, e)}
+                      />
+
+                      <button onClick={() => makePayment(order.orderId)}>
+                        Make Payment
+                      </button>
+                    </div>
+
+                    {/* Generate Invoice Button */}
                     <button
-                      onClick={() =>
-                        applyDiscount(
-                          order.orderId,
-                          discountAmount[order.orderId],
-                          discountType[order.orderId]
-                        )
-                      }
+                      className="generate-invoice"
+                      onClick={() => generateInvoice(order.orderId)}
                     >
-                      Apply Discount
+                      Generate Invoice
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
             ))}
@@ -279,11 +370,12 @@ const OrderTabs = () => {
 };
 
 export default OrderTabs;
-// _____  _  __
-// / ____|| |/ /
-// | (___  | ' /
-//  \___ \ |  <
-//  ____) || . \
-// |_____/ |_|\_\
 
-// 👨‍💻 web site Created by Amir Sohail Sheikh
+// // _____  _  __
+// // / ____|| |/ /
+// // | (___  | ' /
+// //  \___ \ |  <
+// //  ____) || . \
+// // |_____/ |_|\_\
+
+// // 👨‍💻 web site Created by Amir Sohail Sheikh

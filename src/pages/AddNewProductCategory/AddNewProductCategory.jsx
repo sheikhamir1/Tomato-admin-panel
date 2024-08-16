@@ -62,7 +62,7 @@ const AddNewProductCategory = () => {
           );
 
           const responseData = await response.json();
-          console.log("Response:", responseData);
+          // console.log("Response:", responseData);
 
           if (responseData.success) {
             setData({ name: "", description: "" });
